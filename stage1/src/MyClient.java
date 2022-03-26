@@ -13,19 +13,45 @@ public class MyClient {
             // HANDSHAKE
             out.write(("HELO\n").getBytes()); 
             String data = in.readLine();
-            System.out.println("SERVER: "+ data) ;
+            System.out.println("SERVER: "+ data) ; // OK
 
             // AUTHENTICATION
             String username = System.getProperty("user.name");
             out.write(("AUTH"+username+"\n").getBytes()); 
             out.flush();
             data = in.readLine();
-            System.out.println("SERVER: "+ data) ;
+            System.out.println("SERVER: "+ data) ; // OK
     
-            out.write(("REDY\n").getBytes());
-            out.flush(); 
-            data = in.readLine();
-            System.out.println("SERVER: "+ data) ;
+            // LOOP FOR JOBS
+            while (true) {
+                out.write(("REDY\n").getBytes());
+                out.flush(); 
+                data = in.readLine();
+                System.out.println("SERVER: "+ data) ; // next event
+                
+                if (!data.equals("NONE")) {
+                    while (true) {
+                        // client send action for event
+                        // receive response from server
+
+                        if (data.equals("DATA....")) {
+                            while (true) {
+
+                            }
+                        }
+
+                        if (data.equals("OK")) {
+                            break;
+                        }
+                    }
+                }
+                
+                
+                if (data.equals("NONE")) {
+                    break;
+                }
+            }
+            
 
             // QUIT GRACEFULLY 
             out.write(("QUIT\n").getBytes());

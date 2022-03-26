@@ -1,0 +1,14 @@
+C: HELO
+S: OK
+C: AUTH user
+S: OK
+
+Loop:
+    C: REDY
+    S: Event
+
+    if next event != NONE:
+        Loop:
+            C: Action for event
+            S: Response to Action
+            
