@@ -1,42 +1,55 @@
 import java.net.*;
 import java.io.*;
 public class MyClient {
+
+    private static Socket socket;
+    private static BufferedReader input;
+    private static DataOutputStream output;
+    private static String username = System.getProperty("user.name");
+
+    
+    // Writes message to ds-server
+    public static void writeMessage(String message) throws IOException {
+        String formattedMessage = message+"\n";
+        output.write((formattedMessage).getBytes());
+        output.flush();
+    }
+
     public static void main (String args[]) {
     // arguments supply hostname of destination
-        Socket s = null;
         try{
             int serverPort = 50000;
-            s = new Socket(args[0], serverPort);
-            BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
-            DataOutputStream out = new DataOutputStream( s.getOutputStream());
+            socket = new Socket(args[0], serverPort);
+            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            output = new DataOutputStream( socket.getOutputStream());
             
             // HANDSHAKE
-            out.write(("HELO\n").getBytes()); 
-            String data = in.readLine();
+            // output.write(("HELO\n").getBytes()); 
+            writeMessage("HELO");
+            String data = input.readLine();
             System.out.println("SERVER: "+ data) ; // OK
 
             // AUTHENTICATION
-            String username = System.getProperty("user.name");
-            out.write(("AUTH"+username+"\n").getBytes()); 
-            out.flush();
-            data = in.readLine();
+            writeMessage("AUTH " + username);
+            data = input.readLine();
             System.out.println("SERVER: "+ data) ; // OK
     
             // LOOP FOR JOBS
             while (true) {
-                out.write(("REDY\n").getBytes());
-                out.flush(); 
-                data = in.readLine();
+                writeMessage("REDY");
+                data = input.readLine(); // Step 6
                 System.out.println("SERVER: "+ data) ; // next event
+                                                       // JOBN, JOBP, JCPL,
+                                                       // RESF, RESR, NONE
                 
                 if (!data.equals("NONE")) {
                     while (true) {
-                        // client send action for event
+                        // Step 7. client send action for event
                         // receive response from server
 
-                        if (data.equals("DATA....")) {
+                        if (data.equals("something")) {
                             while (true) {
-
+                                
                             }
                         }
 
@@ -46,17 +59,15 @@ public class MyClient {
                     }
                 }
                 
-                
-                if (data.equals("NONE")) {
+                if (data.equals("NONE")) { 
                     break;
                 }
             }
             
 
             // QUIT GRACEFULLY 
-            out.write(("QUIT\n").getBytes());
-            out.flush(); 
-            data = in.readLine();
+            writeMessage("QUIT");
+            data = input.readLine();
             System.out.println("SERVER: "+ data) ;
             
         } catch (UnknownHostException e) {
@@ -67,9 +78,9 @@ public class MyClient {
             System.out.println("IO:"+e.getMessage());
         }
         finally {
-            if(s!=null) {
+            if(socket!=null) {
                 try {
-                    s.close();}catch (IOException e){System.out.println("close:"+e.getMessage());
+                    socket.close();}catch (IOException e){System.out.println("close:"+e.getMessage());
                 }
             }
         }
