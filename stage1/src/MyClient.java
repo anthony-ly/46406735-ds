@@ -41,7 +41,7 @@ public class MyClient {
 
             output.write(("AUTH" + username + "\n").getBytes());
             output.flush();
-            System.out.println("CLIENT: AUTH");
+            System.out.println("CLIENT: AUTH "+ username);
             serverMessage = input.readLine();
             System.out.println("SERVER: " + serverMessage); // OK
 
