@@ -98,8 +98,6 @@ public class MyClient {
             serverMessage = input.readLine(); // .
             System.out.println("SERVER: " + serverMessage); // .
 
-            // TODO: clear input stream?
-
             int LRRServerIncrement = 0;
             int serverLargestMax = Integer.parseInt(serverLargest[1]);
 
@@ -129,11 +127,9 @@ public class MyClient {
                 // Schedule jobs
                 String[] jobInfo = jobn.split(" ");
 
-                output.write(
-                        ("SCHD " + jobInfo[2] + " " + serverLargest[0] + " " + LRRServerIncrement + "\n").getBytes());
+                output.write(("SCHD " + jobInfo[2] + " " + serverLargest[0] + " " + LRRServerIncrement + "\n").getBytes());
                 output.flush();
-                System.out
-                        .println("CLIENT: " + "SCHD " + jobInfo[2] + " " + serverLargest[0] + " " + LRRServerIncrement);
+                System.out.println("CLIENT: " + "SCHD " + jobInfo[2] + " " + serverLargest[0] + " " + LRRServerIncrement);
                 serverMessage = input.readLine(); // TODO, check if needed
                 System.out.println("SERVER: " + serverMessage); // OK
 
