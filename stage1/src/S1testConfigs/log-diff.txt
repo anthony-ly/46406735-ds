@@ -1,9 +1,3 @@
-6,7c6,7
-< RCVD AUTH anthony
-< # Welcome  anthony!
----
-> RCVD AUTHanthony
-> # Welcome anthony!
 12,13c12,13
 < RCVD SCHD 0 xlarge 0
 < t:         25 job     0 (waiting) on # 0 of server xlarge (booting) SCHEDULED
