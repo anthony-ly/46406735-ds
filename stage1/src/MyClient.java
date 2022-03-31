@@ -84,8 +84,11 @@ public class MyClient {
             // String serverList = serverMessage; // stores a list of all the servers
 
             // find the largest server type
+            // loop iterates through all the servers
+            // if the current server has more cores than the current value of largestCores
+            // update the LargestServer object to now refer to the new highest server
             String[] serverLargest;
-            for (int i = 0; i < serverNums; i++) {
+            for (int i = 0; i < serverNums; i++) { 
                 serverMessage = input.readLine();
                 // System.out.println("SERVER: " + serverMessage); // Server info
             }
