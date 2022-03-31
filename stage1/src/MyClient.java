@@ -1,4 +1,5 @@
 import java.net.*;
+import java.util.ArrayList;
 import java.io.*;
 
 public class MyClient {
@@ -22,6 +23,39 @@ public class MyClient {
         message = input.readLine();
 
         return message;
+    }
+
+    // Find the first server of the largest type
+    public static Server findLargestServer(ArrayList<Server> serverList) {
+        // null checks??
+        // check for null, if null, return null, then once you return to main program
+        // if the return value is null, exit the simulation
+        Server largestServer = serverList.get(0);
+        int largestCore = largestServer.core;
+
+        for (Server s : serverList) {
+            if (s.core > largestCore) {
+                largestCore = s.core;
+                largestServer = s;
+            }
+        }
+
+        return largestServer;
+    }
+
+    // Find the number of servers of that type
+    public static int largestServerNumber(ArrayList<Server> serverList, Server largestServer) {
+        // null check?? maybe not needed because if this gets run then both lserver and slist will != null
+        int counter = 0;
+        for (Server s : serverList) {
+            if (s.serverType.equals(largestServer.serverType)) {
+                counter++;
+            }
+        }
+
+        // subtract 1 from counter since indexing starts at 0
+        counter-=1;
+        return counter;
     }
 
     public static void main(String args[]) {
@@ -81,18 +115,28 @@ public class MyClient {
             System.out.println("CLIENT: OK");
             // serverMessage = input.readLine();
 
-            // String serverList = serverMessage; // stores a list of all the servers
+            ArrayList<Server> serverList = new ArrayList<Server>();
 
             // find the largest server type
             // loop iterates through all the servers
             // if the current server has more cores than the current value of largestCores
             // update the LargestServer object to now refer to the new highest server
-            String[] serverLargest;
             for (int i = 0; i < serverNums; i++) { 
+                // get the next server info
                 serverMessage = input.readLine();
+
+                // add the server to the array list
+                serverList.add(new Server(serverMessage));
+                
                 // System.out.println("SERVER: " + serverMessage); // Server info
             }
-            serverLargest = serverMessage.split(" ");
+
+            // now at this point, we have an arraylist that contains all the available servers
+            // lets pass this to a helper function which will determine which server is of the largest type
+            Server largestServer = findLargestServer(serverList);
+
+            // now that we know the largest server, we need to find out how many servers of that type exist
+            int serverLargestMax = largestServerNumber(serverList, largestServer); // TODO: set serverLargestMax to now equal the last serverID of largest type
 
             // Respond with OK
             output.write(("OK\n").getBytes());
@@ -102,12 +146,10 @@ public class MyClient {
             System.out.println("SERVER: " + serverMessage); // .
 
             int LRRServerIncrement = 0;
-            int serverLargestMax = Integer.parseInt(serverLargest[1]);
+            
 
             while (true) {
-                // Check if the loop has exceeded the maximum number of available servers
-                // of largest type
-                // If so, reset to 0
+
                 if (serverMessage.contains("JCPL")) {
                     output.write(("REDY\n").getBytes());
                     output.flush();
@@ -123,6 +165,9 @@ public class MyClient {
                     break;
                 }
 
+                // Check if the loop has exceeded the maximum number of available servers
+                // of largest type
+                // If so, reset to 0
                 if (LRRServerIncrement > serverLargestMax) {
                     LRRServerIncrement = 0;
                 }
@@ -130,9 +175,9 @@ public class MyClient {
                 // Schedule jobs
                 String[] jobInfo = jobn.split(" ");
 
-                output.write(("SCHD " + jobInfo[2] + " " + serverLargest[0] + " " + LRRServerIncrement + "\n").getBytes());
+                output.write(("SCHD " + jobInfo[2] + " " + largestServer.serverType + " " + LRRServerIncrement + "\n").getBytes());
                 output.flush();
-                System.out.println("CLIENT: " + "SCHD " + jobInfo[2] + " " + serverLargest[0] + " " + LRRServerIncrement);
+                System.out.println("CLIENT: " + "SCHD " + jobInfo[2] + " " + largestServer.serverType + " " + LRRServerIncrement);
                 serverMessage = input.readLine(); // TODO, check if needed
                 System.out.println("SERVER: " + serverMessage); // OK
 
