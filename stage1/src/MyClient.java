@@ -9,12 +9,14 @@ public class MyClient {
     private static DataOutputStream output;
     private static String username = System.getProperty("user.name");
     private static String serverMessage;
+    private static int serverPort;
 
     // Writes message to ds-server
     public static void writeMessage(String message) throws IOException {
         String formattedMessage = message + "\n";
         output.write((formattedMessage).getBytes());
         output.flush();
+        System.out.print("CLIENT: " + formattedMessage);
     }
 
     // Receives message from ds-server
@@ -58,39 +60,51 @@ public class MyClient {
         return counter;
     }
 
+    public static boolean openConnection(String hostID, int serverPort) {
+        try {
+            s = new Socket(hostID, serverPort);
+            input = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            output = new DataOutputStream(s.getOutputStream());
+
+            return true;
+            
+        }
+        catch(Exception e) {
+            System.out.println(e);
+        }
+
+        return false;
+    }
+
     public static void main(String args[]) {
         // arguments supply hostname of destination
+        serverPort = 50000;
+
+        if (!openConnection(args[0], serverPort)) {
+            return;
+        }
+
         try {
-            int serverPort = 50000;
-            s = new Socket(args[0], serverPort);
-            BufferedReader input = new BufferedReader(new InputStreamReader(s.getInputStream()));
-            DataOutputStream output = new DataOutputStream(s.getOutputStream());
-
             // HANDSHAKE
-            output.write(("HELO\n").getBytes());
-            output.flush();
-            System.out.println("CLIENT: HELO");
+            writeMessage("HELO");
+
             serverMessage = input.readLine();
             System.out.println("SERVER: " + serverMessage); // OK
 
-            output.write(("AUTH " + username + "\n").getBytes());
-            output.flush();
-            System.out.println("CLIENT: AUTH "+ username);
+            writeMessage("AUTH " + username);
+
             serverMessage = input.readLine();
             System.out.println("SERVER: " + serverMessage); // OK
 
-            output.write(("REDY\n").getBytes());
-            output.flush();
-            System.out.println("CLIENT: REDY");
+            writeMessage("REDY");
+
             serverMessage = input.readLine();
             System.out.println("SERVER: " + serverMessage); // JOBN
 
             String jobn = serverMessage; // store the first job
 
-            // Get server information
-            output.write(("GETS All\n").getBytes());
-            output.flush();
-            System.out.println("CLIENT: GETS All");
+            writeMessage("GETS All");
+
             serverMessage = input.readLine(); // DATA
             System.out.println("SERVER: " + serverMessage); // DATA
 
@@ -138,10 +152,8 @@ public class MyClient {
             // now that we know the largest server, we need to find out how many servers of that type exist
             int serverLargestMax = largestServerNumber(serverList, largestServer);
 
-            // Respond with OK
-            output.write(("OK\n").getBytes());
-            output.flush();
-            System.out.println("CLIENT: OK");
+            writeMessage("OK");
+
             serverMessage = input.readLine(); // .
             System.out.println("SERVER: " + serverMessage); // .
 
@@ -151,9 +163,8 @@ public class MyClient {
             while (true) {
 
                 if (serverMessage.contains("JCPL")) {
-                    output.write(("REDY\n").getBytes());
-                    output.flush();
-                    System.out.println("CLIENT: REDY");
+                    writeMessage("REDY");
+
                     serverMessage = input.readLine();
                     jobn = serverMessage;
                     System.out.println("SERVER: " + serverMessage); // JOBN
@@ -173,31 +184,24 @@ public class MyClient {
                 }
 
                 // Schedule jobs
-                // String[] jobInfo = jobn.split(" "); // TODO change to Job Object
                 Job job = new Job(jobn);
-
-                // output.write(("SCHD " + jobInfo[2] + " " + largestServer.serverType + " " + LRRServerIncrement + "\n").getBytes());
-                output.write(("SCHD " + job.jobID + " " + largestServer.serverType + " " + LRRServerIncrement + "\n").getBytes());
-                output.flush();
-                // System.out.println("CLIENT: " + "SCHD " + jobInfo[2] + " " + largestServer.serverType + " " + LRRServerIncrement);
-                System.out.println("CLIENT: " + "SCHD " + job.jobID + " " + largestServer.serverType + " " + LRRServerIncrement);
+                writeMessage("SCHD " + job.jobID + " " + largestServer.serverType + " " + LRRServerIncrement);
+                
                 serverMessage = input.readLine();
                 System.out.println("SERVER: " + serverMessage); // OK
 
                 LRRServerIncrement += 1;
 
-                output.write(("REDY\n").getBytes());
-                output.flush();
-                System.out.println("CLIENT: REDY");
+                writeMessage("REDY");
+
                 serverMessage = input.readLine();
                 System.out.println("SERVER: " + serverMessage); // JOBN, JCPL etc.
 
                 jobn = serverMessage;
             }
 
-            output.write(("QUIT\n").getBytes());
-            output.flush();
-            System.out.println("CLIENT: QUIT");
+            writeMessage("QUIT");
+
             serverMessage = input.readLine();
             System.out.println("SERVER: " + serverMessage);
 
