@@ -123,10 +123,7 @@ public class MyClient {
             }
 
             // TODO: ERROR HANDLING FOR IF NO RECORDS
-
-            output.write(("OK\n").getBytes());
-            output.flush();
-            System.out.println("CLIENT: OK");
+            writeMessage("OK");
             // serverMessage = input.readLine();
 
             ArrayList<Server> serverList = new ArrayList<Server>();
@@ -212,6 +209,8 @@ public class MyClient {
         finally {
             if (s != null) {
                 try {
+                    input.close();
+                    output.close();
                     s.close();
                 } catch (IOException e) {
                     System.out.println("close:" + e.getMessage());
