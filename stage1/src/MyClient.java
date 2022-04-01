@@ -173,7 +173,7 @@ public class MyClient {
                 }
 
                 // Schedule jobs
-                String[] jobInfo = jobn.split(" ");
+                String[] jobInfo = jobn.split(" "); // TODO change to Job Object
 
                 output.write(("SCHD " + jobInfo[2] + " " + largestServer.serverType + " " + LRRServerIncrement + "\n").getBytes());
                 output.flush();
