@@ -76,6 +76,17 @@ public class MyClient {
         return false;
     }
 
+    public static void closeConnection() {
+        try {
+            input.close();
+            output.close();
+            s.close();
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     public static void main(String args[]) {
         // arguments supply hostname of destination
         serverPort = 50000;
@@ -206,16 +217,6 @@ public class MyClient {
             System.out.println(e);
         }
 
-        finally {
-            if (s != null) {
-                try {
-                    input.close();
-                    output.close();
-                    s.close();
-                } catch (IOException e) {
-                    System.out.println("close:" + e.getMessage());
-                }
-            }
-        }
+        closeConnection();
     }
 }
