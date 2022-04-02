@@ -10,6 +10,7 @@ public class MyClient {
     private static String username = System.getProperty("user.name");
     private static String serverMessage;
     private static int serverPort;
+    private static String hostID;
 
     // Writes message to ds-server
     public static void writeMessage(String message) throws IOException {
@@ -202,10 +203,10 @@ public class MyClient {
     }
 
     public static void main(String args[]) {
-        // arguments supply hostname of destination
+        hostID = "127.0.0.1";
         serverPort = 50000;
 
-        MyClient client = new MyClient(args[0], serverPort);
+        MyClient client = new MyClient(hostID, serverPort);
 
     }
 }
