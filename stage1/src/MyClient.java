@@ -103,30 +103,19 @@ public class MyClient {
         try {
             // HANDSHAKE
             writeMessage("HELO");
-
-            // serverMessage = input.readLine();
-            // System.out.println("SERVER: " + serverMessage); // OK
-            serverMessage = receiveMessage(0);
+            serverMessage = receiveMessage(0); // OK
 
             writeMessage("AUTH " + username);
-
-            // serverMessage = input.readLine();
-            // System.out.println("SERVER: " + serverMessage); // OK
-            serverMessage = receiveMessage(0);
+            serverMessage = receiveMessage(0); // OK
 
             writeMessage("REDY");
+            serverMessage = receiveMessage(0); // JOBN
 
-            // serverMessage = input.readLine();
-            // System.out.println("SERVER: " + serverMessage); // JOBN
-            serverMessage = receiveMessage(0);
-
+            // JOB SCHEDULING
             String jobn = serverMessage; // store the first job
 
             writeMessage("GETS All");
-
-            // serverMessage = input.readLine(); // DATA
-            // System.out.println("SERVER: " + serverMessage); // DATA
-            serverMessage = receiveMessage(0);
+            serverMessage = receiveMessage(0); // DATA
 
             // Split the DATA response
             int serverNums = 0;
@@ -136,7 +125,7 @@ public class MyClient {
                 String nRecs = serverData[1]; // store the number of servers
 
                 if (!nRecs.equals(".")) {
-                    serverNums = Integer.parseInt(nRecs); // store number of servers as int
+                    serverNums = Integer.parseInt(nRecs); // store number of server records as int
                 } else {
                     serverNums = -1;
                 }
@@ -148,36 +137,23 @@ public class MyClient {
 
             ArrayList<Server> serverList = new ArrayList<Server>();
 
-            // find the largest server type
-            // loop iterates through all the servers
-            // if the current server has more cores than the current value of largestCores
-            // update the LargestServer object to now refer to the new highest server
+            // Loop iterates through all the servers and adds them as Server objects to an ArrayList
             for (int i = 0; i < serverNums; i++) {
                 // get the next server info
-                // serverMessage = input.readLine();
-                serverMessage = receiveMessage(1);
+                serverMessage = receiveMessage(1); // server information
 
                 // add the server to the array list
                 serverList.add(new Server(serverMessage));
-
-                // System.out.println("SERVER: " + serverMessage); // Server info
             }
 
-            // now at this point, we have an arraylist that contains all the available
-            // servers
-            // lets pass this to a helper function which will determine which server is of
-            // the largest type
+            // Finding the first largest server
             Server largestServer = findLargestServer(serverList);
 
-            // now that we know the largest server, we need to find out how many servers of
-            // that type exist
+            // Finding the amount of servers of the first largest type
             int serverLargestMax = largestServerNumber(serverList, largestServer);
 
             writeMessage("OK");
-
-            // serverMessage = input.readLine(); // .
-            // System.out.println("SERVER: " + serverMessage); // .
-            serverMessage = receiveMessage(0);
+            serverMessage = receiveMessage(0); // .
 
             int LRRServerIncrement = 0;
 
@@ -185,11 +161,9 @@ public class MyClient {
 
                 if (serverMessage.contains("JCPL")) {
                     writeMessage("REDY");
+                    serverMessage = receiveMessage(0); // JOBN
 
-                    // serverMessage = input.readLine();
-                    serverMessage = receiveMessage(0);
                     jobn = serverMessage;
-                    // System.out.println("SERVER: " + serverMessage); // JOBN
 
                     continue;
                 }
@@ -198,8 +172,7 @@ public class MyClient {
                     break;
                 }
 
-                // Check if the loop has exceeded the maximum number of available servers
-                // of largest type
+                // Check if the loop has exceeded the maximum number of available servers of largest type
                 // If so, reset to 0
                 if (LRRServerIncrement > serverLargestMax) {
                     LRRServerIncrement = 0;
@@ -208,27 +181,18 @@ public class MyClient {
                 // Schedule jobs
                 Job job = new Job(jobn);
                 writeMessage("SCHD " + job.jobID + " " + largestServer.serverType + " " + LRRServerIncrement);
-
-                // serverMessage = input.readLine();
-                // System.out.println("SERVER: " + serverMessage); // OK
-                serverMessage = receiveMessage(0);
+                serverMessage = receiveMessage(0); // OK
 
                 LRRServerIncrement += 1;
 
                 writeMessage("REDY");
-
-                // serverMessage = input.readLine();
-                // System.out.println("SERVER: " + serverMessage); // JOBN, JCPL etc.
-                serverMessage = receiveMessage(0);
+                serverMessage = receiveMessage(0); // JOBN, JCPL etc.
 
                 jobn = serverMessage;
             }
 
             writeMessage("QUIT");
-
-            // serverMessage = input.readLine();
-            // System.out.println("SERVER: " + serverMessage);
-            serverMessage = receiveMessage(0);
+            serverMessage = receiveMessage(0); // QUIT
 
         } catch (Exception e) {
             System.out.println(e);
