@@ -9,6 +9,21 @@ public class Server {
     int wJobs;
     int rJobs;
 
+    /**
+     * 
+     * @param inServerType
+     * @param inServerID
+     * @param inState
+     * @param inCurStartTime
+     * @param inCore
+     * @param inMemory
+     * @param inDisk
+     * @param inWJobs
+     * @param inRJobs
+     * 
+     * Constructor for Server that takes in individual arguments and assigns them to
+     * the corresponding object fields
+     */
     public Server(String inServerType, int inServerID, String inState, 
                   int inCurStartTime, int inCore, int inMemory, 
                   int inDisk, int inWJobs, int inRJobs) {
@@ -24,6 +39,12 @@ public class Server {
         rJobs = inRJobs;
     }
 
+    /**
+     * 
+     * @param server Raw server data that is sent by ds-server
+     * 
+     * Constructor for Server that parses raw string data into object fields
+     */
     public Server(String server) {
         String[] serverData = server.split(" ");
         serverType = serverData[0];

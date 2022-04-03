@@ -12,7 +12,14 @@ public class MyClient {
     private static int serverPort;
     private static String hostID;
 
-    // Writes message to ds-server
+    /**
+     * 
+     * @param message This is the message that the client-side simulator will
+     *                send to ds-server
+     * @throws IOException
+     * 
+     * Writes message to ds-server and prints it out on the console
+     */
     public static void writeMessage(String message) throws IOException {
         String formattedMessage = message + "\n";
         output.write((formattedMessage).getBytes());
@@ -20,14 +27,19 @@ public class MyClient {
         System.out.print("CLIENT: " + formattedMessage);
     }
 
-    // Receives message from ds-server
+    /**
+     * 
+     * @param printPrefix 0: Prints with "SERVER: " prefix
+     *                    1: Prints without prefix
+     * @return The input received from ds-server as a String
+     * @throws IOException
+     * 
+     * Receives message sent from ds-server
+     */
     public static String receiveMessage(int printPrefix) throws IOException {
         String message = "";
         message = input.readLine();
         
-        // Value of printResponse determines if console output is prefixed with "SERVER"
-        // 0 -> print with prefix
-        // 1 -> print without prefix
         if (printPrefix == 0) {
             System.out.println("SERVER: " + message);
         } else if (printPrefix == 1) {
@@ -37,7 +49,13 @@ public class MyClient {
         return message;
     }
 
-    // Find the first server of the largest type
+    /**
+     * 
+     * @param serverList List containing all the servers queried by client's GETS request
+     * @return Server object that holds the data of the first server of the first largest type
+     * 
+     * Finds the first server of the largest type from a given ArrayList
+     */
     public static Server findLargestServer(ArrayList<Server> serverList) {
         Server largestServer = serverList.get(0);
         int largestCore = largestServer.core;
@@ -52,11 +70,18 @@ public class MyClient {
         return largestServer;
     }
 
-    // Find the number of servers of that type
-    public static int largestServerNumber(ArrayList<Server> serverList, Server largestServer) {
+    /**
+     * 
+     * @param serverList List containing all the servers queried by client's GETS request
+     * @param server Server object that is used to count the number of servers of the same type
+     * @return
+     * 
+     * Find the number of servers in an ArrayList that have the same serverType as the parameter server
+     */
+    public static int findServerCount(ArrayList<Server> serverList, Server server) {
         int counter = 0;
         for (Server s : serverList) {
-            if (s.serverType.equals(largestServer.serverType)) {
+            if (s.serverType.equals(server.serverType)) {
                 counter++;
             }
         }
@@ -66,7 +91,14 @@ public class MyClient {
         return counter;
     }
 
-    // Creates socket connection with ds-server and opens input and output streams
+    /**
+     * 
+     * @param hostID IP address 
+     * @param serverPort Port number
+     * @return true if connection with ds-server has been successful, false otherwise
+     * 
+     * Creates socket connection with ds-server and opens input and output streams
+     */
     public static boolean openConnection(String hostID, int serverPort) {
         try {
             s = new Socket(hostID, serverPort);
@@ -83,7 +115,10 @@ public class MyClient {
         return false;
     }
 
-    // Closes socket connection with ds-server and closes input and output streams
+    /**
+     * 
+     * Closes socket connection with ds-server and closes input and output streams
+     */
     public static void closeConnection() {
         try {
             input.close();
@@ -95,7 +130,14 @@ public class MyClient {
         }
     }
 
-    // Constructor
+    /**
+     * 
+     * @param hostID IP address 
+     * @param serverPort Port number
+     * 
+     * Constructor for MyClient
+     * Responsible for scheduling jobs in LRR
+     */
     public MyClient(String hostID, int serverPort) {
         if (!openConnection(hostID, serverPort)) {
             return;
@@ -132,9 +174,12 @@ public class MyClient {
                 }
             }
 
-            // TODO: ERROR HANDLING FOR IF NO RECORDS
+            // ERROR HANDLING FOR IF NO RECORDS
+            if (serverNums == -1) {
+                writeMessage("QUIT");
+            }
+
             writeMessage("OK");
-            // serverMessage = input.readLine();
 
             ArrayList<Server> serverList = new ArrayList<Server>();
 
@@ -151,7 +196,7 @@ public class MyClient {
             Server largestServer = findLargestServer(serverList);
 
             // Finding the amount of servers of the first largest type
-            int serverLargestMax = largestServerNumber(serverList, largestServer);
+            int serverLargestMax = findServerCount(serverList, largestServer);
 
             writeMessage("OK");
             serverMessage = receiveMessage(0); // .
