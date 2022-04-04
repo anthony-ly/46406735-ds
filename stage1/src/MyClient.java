@@ -4,7 +4,7 @@ import java.io.*;
 
 public class MyClient {
 
-    private static Socket s;
+    private static Socket socket;
     private static BufferedReader input;
     private static DataOutputStream output;
     private static String username = System.getProperty("user.name");
@@ -101,9 +101,9 @@ public class MyClient {
      */
     public static boolean openConnection(String hostID, int serverPort) {
         try {
-            s = new Socket(hostID, serverPort);
-            input = new BufferedReader(new InputStreamReader(s.getInputStream()));
-            output = new DataOutputStream(s.getOutputStream());
+            socket = new Socket(hostID, serverPort);
+            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            output = new DataOutputStream(socket.getOutputStream());
 
             return true;
             
@@ -123,7 +123,7 @@ public class MyClient {
         try {
             input.close();
             output.close();
-            s.close();
+            socket.close();
         }
         catch (Exception e) {
             System.out.println(e);
