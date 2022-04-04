@@ -18,34 +18,25 @@ public class MyClient {
      *                send to ds-server
      * @throws IOException
      * 
-     * Writes message to ds-server and prints it out on the console
+     * Writes message to ds-server
      */
     public static void writeMessage(String message) throws IOException {
         String formattedMessage = message + "\n";
         output.write((formattedMessage).getBytes());
         output.flush();
-        System.out.print("CLIENT: " + formattedMessage);
     }
 
     /**
      * 
-     * @param printPrefix 0: Prints with "SERVER: " prefix
-     *                    1: Prints without prefix
      * @return The input received from ds-server as a String
      * @throws IOException
      * 
      * Receives message sent from ds-server
      */
-    public static String receiveMessage(int printPrefix) throws IOException {
+    public static String receiveMessage() throws IOException {
         String message = "";
         message = input.readLine();
         
-        if (printPrefix == 0) {
-            System.out.println("SERVER: " + message);
-        } else if (printPrefix == 1) {
-            System.out.println(message);
-        }
-
         return message;
     }
 
@@ -146,19 +137,19 @@ public class MyClient {
         try {
             // HANDSHAKE
             writeMessage("HELO");
-            serverMessage = receiveMessage(0); // OK
+            serverMessage = receiveMessage(); // OK
 
             writeMessage("AUTH " + username);
-            serverMessage = receiveMessage(0); // OK
+            serverMessage = receiveMessage(); // OK
 
             writeMessage("REDY");
-            serverMessage = receiveMessage(0); // JOBN
+            serverMessage = receiveMessage(); // JOBN
 
             // JOB SCHEDULING
             String jobn = serverMessage; // store the first job
 
             writeMessage("GETS All");
-            serverMessage = receiveMessage(0); // DATA
+            serverMessage = receiveMessage(); // DATA
 
             // Split the DATA response
             int serverNums = 0;
@@ -186,7 +177,7 @@ public class MyClient {
             // Loop iterates through all the servers and adds them as Server objects to an ArrayList
             for (int i = 0; i < serverNums; i++) {
                 // get the next server info
-                serverMessage = receiveMessage(1); // server information
+                serverMessage = receiveMessage(); // server information
 
                 // add the server to the array list
                 serverList.add(new Server(serverMessage));
@@ -199,7 +190,7 @@ public class MyClient {
             int serverLargestMax = findServerCount(serverList, largestServer);
 
             writeMessage("OK");
-            serverMessage = receiveMessage(0); // .
+            serverMessage = receiveMessage(); // .
 
             int LRRServerIncrement = 0;
 
@@ -207,7 +198,7 @@ public class MyClient {
 
                 if (serverMessage.contains("JCPL")) {
                     writeMessage("REDY");
-                    serverMessage = receiveMessage(0); // JOBN
+                    serverMessage = receiveMessage(); // JOBN
 
                     jobn = serverMessage;
 
@@ -227,18 +218,18 @@ public class MyClient {
                 // Schedule jobs
                 Job job = new Job(jobn);
                 writeMessage("SCHD " + job.jobID + " " + largestServer.serverType + " " + LRRServerIncrement);
-                serverMessage = receiveMessage(0); // OK
+                serverMessage = receiveMessage(); // OK
 
                 LRRServerIncrement += 1;
 
                 writeMessage("REDY");
-                serverMessage = receiveMessage(0); // JOBN, JCPL etc.
+                serverMessage = receiveMessage(); // JOBN, JCPL etc.
 
                 jobn = serverMessage;
             }
 
             writeMessage("QUIT");
-            serverMessage = receiveMessage(0); // QUIT
+            serverMessage = receiveMessage(); // QUIT
 
         } catch (Exception e) {
             System.out.println(e);
