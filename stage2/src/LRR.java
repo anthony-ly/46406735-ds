@@ -4,14 +4,14 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 
 public class LRR extends Algorithm {
-    // private static String serverMessage;
-    // private static String getUsername() = System.getProperty("user.name");
 
     public LRR(BufferedReader in, DataOutputStream out) {
-        // super();
         super(in, out);
     }
 
+    /**
+     * Schedules jobs in a largest-round-robin fashion.
+     */
     @Override
     public void run() throws IOException {
         // HANDSHAKE

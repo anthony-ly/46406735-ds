@@ -1,5 +1,4 @@
 import java.net.*;
-import java.util.ArrayList;
 import java.io.*;
 
 public class MyClient {

@@ -13,8 +13,13 @@ public abstract class Algorithm {
         output = out;
     }
 
+    /**
+     * Abstract method that each scheduling algorithm implements
+     * @throws IOException
+     */
     public abstract void run() throws IOException;
 
+    // Getter and setter methods for fields
     public static String getUsername() {
         return username;
     }
@@ -55,6 +60,9 @@ public abstract class Algorithm {
         return message;
     }
 
+    /**
+     * Closes the input and output streams for the algorithm
+     */
     public static void closeReaders() {
         try {
 			input.close();
