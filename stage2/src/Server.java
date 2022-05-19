@@ -57,4 +57,12 @@ public class Server {
         wJobs =  Integer.parseInt(serverData[7]);
         rJobs =  Integer.parseInt(serverData[8]);
     }
+
+    public boolean noJobs() {
+        return wJobs == 0 && rJobs == 0;
+    }
+
+    public String getState() {
+        return state;
+    }
 }

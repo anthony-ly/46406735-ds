@@ -9,21 +9,21 @@ RCVD AUTH anthony
 SENT OK
 RCVD REDY
 SENT JOBN 28 0 1401 2 1800 3300
-RCVD SCHD 0 mysterious 0
-t:         28 job     0 (waiting) on # 0 of server mysterious (booting) SCHEDULED
+RCVD SCHD 0 unknown 0
+t:         28 job     0 (waiting) on # 0 of server unknown (booting) SCHEDULED
 SENT OK
 RCVD REDY
-t:         88 job     0 on # 0 of server mysterious RUNNING
-t:       3067 job     0 on # 0 of server mysterious COMPLETED
-SENT JCPL 3067 0 mysterious 0
+t:         58 job     0 on # 0 of server unknown RUNNING
+t:       3037 job     0 on # 0 of server unknown COMPLETED
+SENT JCPL 3037 0 unknown 0
 RCVD REDY
 SENT NONE
 RCVD QUIT
 SENT QUIT
 # -------------------------------------------------------------------------------------
-# 0 unknown servers used with a utilisation of 0.00 at the cost of $0.00
-# 1 mysterious servers used with a utilisation of 100.00 at the cost of $0.66
+# 1 unknown servers used with a utilisation of 100.00 at the cost of $0.17
+# 0 mysterious servers used with a utilisation of 0.00 at the cost of $0.00
 # ==================================== [ Summary ] ====================================
-# actual simulation end time: 3067, #jobs: 1 (failed 0 times)
-# total #servers used: 1, avg util: 100.00% (ef. usage: 100.00%), total cost: $0.66
-# avg waiting time: 60, avg exec time: 2979, avg turnaround time: 3039
+# actual simulation end time: 3037, #jobs: 1 (failed 0 times)
+# total #servers used: 1, avg util: 100.00% (ef. usage: 100.00%), total cost: $0.17
+# avg waiting time: 30, avg exec time: 2979, avg turnaround time: 3009
