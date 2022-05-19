@@ -64,6 +64,8 @@ public class MyClient {
         }
         if (schedAlgo.equals("lrr")) {
             schedulingAlgorithm = new LRR(input, output);
+        } else if (schedAlgo.equals("s")) {
+            schedulingAlgorithm = new MyAlgorithm(input, output);
         }
 
         try {
