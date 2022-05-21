@@ -87,24 +87,22 @@ public class MyAlgorithm extends Algorithm {
 
             setServerMessage(receiveMessage()); // .
 
-            Server first = null; // stores the first capable server in case there are no active/booting servers found
+            Server first = serverList.get(0); // stores the first capable server in case there are no active/booting servers found
             // determine which server to send the job to
             // 1. must not have any running jobs and waiting jobs at the same time
-            for(int i = 0; i < serverList.size(); i++) {
-                if(serverList.get(i).noJobs()) {
-                    first = serverList.get(i);
-                    break;
-                } 
-            }
+            // for(int i = 0; i < serverList.size(); i++) {
+            //     if(serverList.get(i).noJobs()) {
+            //         first = serverList.get(i);
+            //         break;
+            //     } 
+            // }
 
-            if (first == null) {
-                for(int i = 0; i < serverList.size(); i++) {
-                    if(serverList.get(i).getState().equals("active") || serverList.get(i).getState().equals("booting")) {
-                        first = serverList.get(i);
-                        break;
-                    } 
-                }
-            }
+            // for(int i = 0; i < serverList.size(); i++) {
+            //     if(serverList.get(i).getState().equals("active") || serverList.get(i).getState().equals("booting")) {
+            //         first = serverList.get(i);
+            //         break;
+            //     }
+            // }
 
             // Schedule jobs
             // job = new Job(jobn);
