@@ -58,11 +58,21 @@ public class Server {
         rJobs =  Integer.parseInt(serverData[8]);
     }
 
+    /**
+     * 
+     * @return true if the server has no jobs running or waiting, false otherwise
+     */
     public boolean noJobs() {
         return wJobs == 0 && rJobs == 0;
     }
 
+    /**
+     * 
+     * @return the current state of the server
+     */
     public String getState() {
         return state;
     }
+    
+    
 }
