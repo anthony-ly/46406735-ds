@@ -42,4 +42,8 @@ public class Job {
         memory = Integer.parseInt(jobData[5]);
         disk = Integer.parseInt(jobData[6]);
     }
+
+    public String getRequirements() {
+        return core + " " + memory + " " + disk;
+    }
 }

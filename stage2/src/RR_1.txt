@@ -1,0 +1,104 @@
+Running config20-long-low.xml
+Running config20-med-med.xml
+Running config20-short-high.xml
+Running config32-long-high.xml
+Running config32-long-med.xml
+Running config32-med-high.xml
+Running config32-med-low.xml
+Running config32-short-low.xml
+Running config32-short-med.xml
+Running config50-long-high.xml
+Running config50-long-low.xml
+Running config50-long-med.xml
+Running config50-med-high.xml
+Running config50-med-low.xml
+Running config50-med-med.xml
+Running config50-short-high.xml
+Running config50-short-low.xml
+Running config50-short-med.xml
+
+Turnaround time
+Config                      |FC        |FF        |BF        |WF        |Yours     
+config20-long-low.xml       |84151     |2494      |2494      |2598      |2494      
+config20-med-med.xml        |136025    |1176      |1176      |7887      |1314      
+config20-short-high.xml     |124780    |3055      |3339      |34484     |2835      
+config32-long-high.xml      |434726    |3370      |4311      |35281     |3474      
+config32-long-med.xml       |277468    |2566      |2566      |10991     |2633      
+config32-med-high.xml       |433119    |3197      |2561      |30525     |2079      
+config32-med-low.xml        |105100    |1210      |1210      |1294      |1210      
+config32-short-low.xml      |102448    |696       |696       |3575      |696       
+config32-short-med.xml      |201756    |676       |691       |27258     |686       
+config50-long-high.xml      |515239    |2396      |2390      |63359     |3576      
+config50-long-low.xml       |138326    |2431      |2431      |2902      |2431      
+config50-long-med.xml       |360933    |2392      |2392      |11418     |2580      
+config50-med-high.xml       |461202    |2135      |1988      |36715     |1978      
+config50-med-low.xml        |99027     |1109      |1109      |1867      |1109      
+config50-med-med.xml        |349052    |1151      |1151      |6141      |1229      
+config50-short-high.xml     |270003    |1106      |1792      |46973     |2330      
+config50-short-low.xml      |78939     |656       |657       |1070      |656       
+config50-short-med.xml      |262596    |647       |647       |28641     |667       
+Average                     |246382.78 |1803.50   |1866.72   |19609.94  |1887.61   
+Normalised (FC)             |1.0000    |0.0073    |0.0076    |0.0796    |0.0077    
+Normalised (FF)             |136.6137  |1.0000    |1.0351    |10.8733   |1.0466    
+Normalised (BF)             |131.9868  |0.9661    |1.0000    |10.5050   |1.0112    
+Normalised (WF)             |12.5642   |0.0920    |0.0952    |1.0000    |0.0963    
+Normalised (AVG [FF,BF,WF]) |31.7501   |0.2324    |0.2406    |2.5270    |0.2432    
+
+Resource utilisation
+Config                      |FC        |FF        |BF        |WF        |Yours     
+config20-long-low.xml       |87.68     |55.52     |56.64     |56.53     |61.49     
+config20-med-med.xml        |97.50     |68.61     |66.32     |65.85     |78.84     
+config20-short-high.xml     |99.74     |87.18     |83.23     |64.45     |99.27     
+config32-long-high.xml      |93.43     |80.89     |80.25     |72.47     |89.93     
+config32-long-med.xml       |93.31     |62.96     |62.19     |49.12     |64.74     
+config32-med-high.xml       |92.21     |79.89     |79.10     |51.36     |92.50     
+config32-med-low.xml        |78.16     |37.26     |37.17     |58.90     |37.26     
+config32-short-low.xml      |71.85     |37.88     |37.73     |53.60     |37.92     
+config32-short-med.xml      |86.91     |57.47     |56.91     |51.84     |59.21     
+config50-long-high.xml      |100.00    |84.33     |77.51     |82.31     |97.28     
+config50-long-low.xml       |100.00    |48.97     |48.75     |97.26     |47.49     
+config50-long-med.xml       |100.00    |72.38     |64.73     |78.38     |77.35     
+config50-med-high.xml       |100.00    |82.30     |76.49     |62.35     |98.13     
+config50-med-low.xml        |98.87     |33.88     |36.29     |82.53     |35.21     
+config50-med-med.xml        |100.00    |68.73     |62.97     |79.22     |76.20     
+config50-short-high.xml     |100.00    |86.56     |80.06     |80.76     |99.12     
+config50-short-low.xml      |99.12     |29.95     |29.32     |82.62     |28.18     
+config50-short-med.xml      |99.92     |64.65     |57.33     |68.66     |71.40     
+Average                     |94.37     |63.30     |60.72     |68.79     |69.53     
+Normalised (FC)             |1.0000    |0.6708    |0.6434    |0.7289    |0.7368    
+Normalised (FF)             |1.4909    |1.0000    |0.9593    |1.0867    |1.0984    
+Normalised (BF)             |1.5542    |1.0425    |1.0000    |1.1329    |1.1450    
+Normalised (WF)             |1.3719    |0.9202    |0.8827    |1.0000    |1.0107    
+Normalised (AVG [FF,BF,WF]) |1.4684    |0.9849    |0.9448    |1.0703    |1.0818    
+
+Total rental cost
+Config                      |FC        |FF        |BF        |WF        |Yours     
+config20-long-low.xml       |104.68    |206.54    |208.86    |237.31    |223.03    
+config20-med-med.xml        |150.99    |287.25    |268.48    |273.50    |297.93    
+config20-short-high.xml     |133.57    |181.77    |185.17    |220.23    |181.66    
+config32-long-high.xml      |199.63    |239.41    |240.58    |259.97    |238.66    
+config32-long-med.xml       |138.35    |226.20    |226.04    |206.52    |232.20    
+config32-med-high.xml       |177.25    |222.35    |217.29    |243.56    |211.18    
+config32-med-low.xml        |87.90     |194.82    |194.11    |141.35    |194.82    
+config32-short-low.xml      |83.27     |192.14    |192.14    |134.86    |192.14    
+config32-short-med.xml      |110.87    |183.44    |184.59    |188.09    |185.92    
+config50-long-high.xml      |1155.19   |1501.51   |1499.19   |1614.23   |1534.55   
+config50-long-low.xml       |365.60    |824.02    |779.63    |778.55    |835.64    
+config50-long-med.xml       |735.52    |1140.81   |1163.05   |1267.73   |1485.20   
+config50-med-high.xml       |995.57    |1323.38   |1313.19   |1512.19   |1330.93   
+config50-med-low.xml        |301.83    |876.88    |841.25    |804.84    |879.09    
+config50-med-med.xml        |728.25    |1246.19   |1288.20   |1271.69   |1494.22   
+config50-short-high.xml     |537.72    |692.03    |710.52    |817.12    |734.37    
+config50-short-low.xml      |251.75    |890.16    |868.14    |819.33    |996.68    
+config50-short-med.xml      |567.65    |1058.34   |1083.68   |1180.50   |1225.71   
+Average                     |379.20    |638.18    |636.89    |665.09    |693.00    
+Normalised (FC)             |1.0000    |1.6830    |1.6796    |1.7539    |1.8275    
+Normalised (FF)             |0.5942    |1.0000    |0.9980    |1.0422    |1.0859    
+Normalised (BF)             |0.5954    |1.0020    |1.0000    |1.0443    |1.0881    
+Normalised (WF)             |0.5701    |0.9595    |0.9576    |1.0000    |1.0420    
+Normalised (AVG [FF,BF,WF]) |0.5863    |0.9868    |0.9848    |1.0284    |1.0716    
+
+Final results:
+2.1: 1/1
+2.2: 0/1
+2.3: 3/7
