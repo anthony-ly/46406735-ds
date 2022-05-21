@@ -8,6 +8,8 @@ import java.io.DataOutputStream;
 
 public class RR extends Algorithm {
 
+    HashMap<String, int[]> serverNumbers;
+
     public RR(BufferedReader in, DataOutputStream out) {
         super(in, out);
     }
@@ -29,7 +31,7 @@ public class RR extends Algorithm {
         String jobn = getServerMessage(); // store the first job
         // TODO: error handling in case jobn is not a job
         Job job = new Job(jobn);
-        getServerNumbers();
+        // serverNumbers = getServerNumbers();
 
         // looping stuff
         while(true) {
@@ -96,7 +98,11 @@ public class RR extends Algorithm {
                     allBusy = false;
                     // schedule the thingy
                     // TODO, instead of s.serverID change it to the serverType increment for RR scheduling
+                    // writeMessage("SCHD " + job.jobID + " " + s.serverType + " " + findNextServerIncrement(s.serverType));
                     writeMessage("SCHD " + job.jobID + " " + s.serverType + " " + s.serverID);
+
+                    // set the value[0] ++
+                    // do error checking too
 
                     // receive OK from server
                     setServerMessage(receiveMessage()); // OK
@@ -171,7 +177,7 @@ public class RR extends Algorithm {
         return jobTime;
     }
 
-    public void getServerNumbers() throws IOException {
+    public HashMap<String, int[]> getServerNumbers() throws IOException {
         HashMap<String, int[]> serverNumbers = new HashMap<String, int[]>();
 
         writeMessage("GETS All");
@@ -214,7 +220,7 @@ public class RR extends Algorithm {
 
         writeMessage("OK");
         setServerMessage(receiveMessage()); // .
-        // return serverNumbers;
+        return serverNumbers;
     }
 
         /**
@@ -232,7 +238,22 @@ public class RR extends Algorithm {
                 counter++;
             }
         }
-
+        // subtract 1 from counter since indexing starts at 0
+        counter-=1;
         return counter;
+    }
+
+    public int findNextServerIncrement(String s) {
+        int nextIncrement = serverNumbers.get(s)[0];
+        int maxIncrement = serverNumbers.get(s)[1];
+
+        if (nextIncrement > maxIncrement) {
+            nextIncrement = 0;
+            serverNumbers.put(s, new int[]{nextIncrement, maxIncrement});
+        } else {
+            serverNumbers.put(s, new int[]{nextIncrement+1, maxIncrement});
+        }
+
+        return nextIncrement;
     }
 }
