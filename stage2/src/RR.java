@@ -1,5 +1,8 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 
@@ -26,6 +29,7 @@ public class RR extends Algorithm {
         String jobn = getServerMessage(); // store the first job
         // TODO: error handling in case jobn is not a job
         Job job = new Job(jobn);
+        getServerNumbers();
 
         // looping stuff
         while(true) {
@@ -33,9 +37,7 @@ public class RR extends Algorithm {
             if (getServerMessage().contains("JCPL")) {
                 writeMessage("REDY");
                 setServerMessage(receiveMessage()); // JOBN
-
                 jobn = getServerMessage();
-
                 continue;
             }
 
@@ -45,7 +47,7 @@ public class RR extends Algorithm {
 
             job = new Job(jobn);
 
-            // arraylsit that stores the capable servers
+            // arraylist that stores the capable servers
             ArrayList<Server> capableServers = new ArrayList<Server>();
             writeMessage("GETS Capable "+ job.getRequirements());
             setServerMessage(receiveMessage()); // DATA
@@ -93,13 +95,12 @@ public class RR extends Algorithm {
                 if(s.noJobs()) { // if no waiting or running jobs
                     allBusy = false;
                     // schedule the thingy
+                    // TODO, instead of s.serverID change it to the serverType increment for RR scheduling
                     writeMessage("SCHD " + job.jobID + " " + s.serverType + " " + s.serverID);
 
                     // receive OK from server
                     setServerMessage(receiveMessage()); // OK
-
-                    // then break loop
-                    break;
+                    break; // then break loop
                 }
             }
             
@@ -168,5 +169,70 @@ public class RR extends Algorithm {
         setServerMessage(receiveMessage()); // .
 
         return jobTime;
+    }
+
+    public void getServerNumbers() throws IOException {
+        HashMap<String, int[]> serverNumbers = new HashMap<String, int[]>();
+
+        writeMessage("GETS All");
+        setServerMessage(receiveMessage()); // DATA ___
+
+        int numRecs = getNumDataFields();
+        writeMessage("OK");
+
+        // store servertypes in a set
+        Set<String> serverTypes = new HashSet<String>();
+
+        // store server info in an arraylist
+        ArrayList<Server> serverList = new ArrayList<Server>();
+
+        // Loop iterates through all the servers and adds them as Server objects to an
+        // ArrayList
+        for (int i = 0; i < numRecs; i++) {
+            // get the next server info
+            setServerMessage(receiveMessage()); // server information
+
+            // add the serverType to the set
+            String type = getServerMessage().split(" ")[0];
+            serverTypes.add(type);
+
+            // add the server to the array list
+            serverList.add(new Server(getServerMessage()));
+        }
+
+        // initialise the hashmap to hold the stuff
+
+        for(String s: serverTypes) {
+            int[] serverNumber = new int[] {0, findServerCount(serverList, s)};
+            serverNumbers.put(s, serverNumber);
+        }
+
+        for(String s: serverNumbers.keySet()) {
+            System.out.println(s + " " + serverNumbers.get(s)[0] + " " + serverNumbers.get(s)[1]);
+        }
+        
+
+        writeMessage("OK");
+        setServerMessage(receiveMessage()); // .
+        // return serverNumbers;
+    }
+
+        /**
+     * 
+     * @param serverList List containing all the servers queried by client's GETS request
+     * @param server Server object that is used to count the number of servers of the same type
+     * @return
+     * 
+     * Find the number of servers in an ArrayList that have the same serverType as the parameter server
+     */
+    public static int findServerCount(ArrayList<Server> serverList, String server) {
+        int counter = 0;
+        for (Server s : serverList) {
+            if (s.serverType.equals(server)) {
+                counter++;
+            }
+        }
+
+        return counter;
     }
 }
