@@ -42,7 +42,7 @@ public abstract class Algorithm {
      */
     public static void writeMessage(String message) throws IOException {
         String formattedMessage = message + "\n";
-        // System.out.println("CLIENT: "+formattedMessage);
+        // System.out.println("CLIENT: "+message);
         output.write((formattedMessage).getBytes());
         output.flush();
     }

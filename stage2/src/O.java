@@ -6,11 +6,11 @@ import java.util.Set;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 
-public class RR extends Algorithm {
+public class O extends Algorithm {
 
-    HashMap<String, int[]> serverNumbers;
+    // HashMap<String, int[]> serverNumbers;
 
-    public RR(BufferedReader in, DataOutputStream out) {
+    public O(BufferedReader in, DataOutputStream out) {
         super(in, out);
     }
 
@@ -31,7 +31,7 @@ public class RR extends Algorithm {
         String jobn = getServerMessage(); // store the first job
         // TODO: error handling in case jobn is not a job
         Job job = new Job(jobn);
-        serverNumbers = getServerNumbers();
+        // serverNumbers = getServerNumbers();
 
         // looping stuff
         while(true) {
@@ -94,16 +94,16 @@ public class RR extends Algorithm {
                 // CLIENT: OK
             boolean allBusy = true;
             for(Server s: capableServers) {
-                int nextIncrement = findNextServerIncrement(s.serverType); //TODO change so increment only increases when job successfully
-                if(s.noJobs() && nextIncrement == s.serverID) { // if no waiting or running jobs
+                // int nextIncrement = findNextServerIncrement(s.serverType); //TODO change so increment only increases when job successfully
+                if(s.noJobs()) { // if no waiting or running jobs
                     allBusy = false;
                     // schedule the thingy
                     // TODO, instead of s.serverID change it to the serverType increment for RR scheduling
-                    writeMessage("SCHD " + job.jobID + " " + s.serverType + " " + nextIncrement);
+                    // writeMessage("SCHD " + job.jobID + " " + s.serverType + " " + nextIncrement);
 
-                    int maxIncrement = serverNumbers.get(s.serverType)[1];
-                    serverNumbers.put(s.serverType, new int[]{nextIncrement+1, maxIncrement}); // increase increment
-                    // writeMessage("SCHD " + job.jobID + " " + s.serverType + " " + s.serverID);
+                    // int maxIncrement = serverNumbers.get(s.serverType)[1];
+                    // serverNumbers.put(s.serverType, new int[]{nextIncrement+1, maxIncrement}); // increase increment
+                    writeMessage("SCHD " + job.jobID + " " + s.serverType + " " + s.serverID);
 
                     // set the value[0] ++
                     // do error checking too
@@ -253,18 +253,5 @@ public class RR extends Algorithm {
         counter-=1;
         return counter;
     }
-
-    public int findNextServerIncrement(String s) {
-        int nextIncrement = serverNumbers.get(s)[0];
-        int maxIncrement = serverNumbers.get(s)[1];
-
-        if (nextIncrement > maxIncrement) {
-            nextIncrement = 0;
-            // serverNumbers.put(s, new int[]{nextIncrement, maxIncrement});
-        // } else {
-            // serverNumbers.put(s, new int[]{nextIncrement+1, maxIncrement});
-        }
-
-        return nextIncrement;
-    }
 }
+
