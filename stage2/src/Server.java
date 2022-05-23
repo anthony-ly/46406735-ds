@@ -73,6 +73,10 @@ public class Server {
     public String getState() {
         return state;
     }
+
+    public String toString() {
+        return serverType + " " + serverID + " " + state + " " + curStartTime + " " + core + " " + memory + " " + disk + " " + wJobs + " " + rJobs;
+    }
     
     
 }
