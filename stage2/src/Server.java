@@ -66,12 +66,43 @@ public class Server {
 
     /**
      * 
+     * @param j - job to add to queue
+     * adds j to the job queue
+     */
+    public void scheduleJob(Job j) {
+        queue.add(j);
+    }
+
+    /**
+     * 
+     * @param jobID - ID of the job object to remove from queue
+     * removes the job that has the corresponding jobID from the queue (if it exists)
+     */
+    public void removeJob(int jobID) {
+        // remove the job
+        Iterator<Job> iter = queue.iterator();
+        while (iter.hasNext()) {
+            Job j = iter.next();
+
+            if (j.jobID == jobID) {
+                iter.remove();
+            }
+        }
+    }
+
+    /**
+     * 
      * @return true if the server has no jobs running or waiting, false otherwise
      */
     public boolean noJobs() {
         return wJobs == 0 && rJobs == 0;
     }
 
+    /**
+     * 
+     * @param j - job to be scheduled
+     * @return true if the server has enough resources to run the job NOW, false otherwise.
+     */
     public boolean canRunNow(Job j) {
         int availableCore = core;
         int availableMemory = memory;
@@ -87,22 +118,11 @@ public class Server {
         return availableCore >= j.core && availableMemory >= j.memory && availableDisk >= j.disk;
     }
 
-    public void scheduleJob(Job j) {
-        queue.add(j);
-    }
-
-    public void removeJob(int jobID) {
-        // remove the job
-        Iterator<Job> iter = queue.iterator();
-        while (iter.hasNext()) {
-            Job j = iter.next();
-
-            if (j.jobID == jobID) {
-                iter.remove();
-            }
-        }
-    }
-
+    /**
+     * 
+     * @param j - job to be scheduled
+     * @return true if the server has enough resources to eventually run the job j, false otherwise
+     */
     public boolean canRunLater(Job j) {
         return core >= j.core && memory >= j.memory && disk >= j.disk;
     }
@@ -123,9 +143,10 @@ public class Server {
         return state;
     }
 
+    /**
+     * returns String that is formatted the same way ds-server formats server information
+     */
     public String toString() {
         return serverType + " " + serverID + " " + state + " " + curStartTime + " " + core + " " + memory + " " + disk + " " + wJobs + " " + rJobs;
     }
-    
-    
 }
