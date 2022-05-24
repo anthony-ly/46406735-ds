@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Iterator;
+
 public class Server {
     String serverType;
     int serverID;
@@ -8,6 +11,9 @@ public class Server {
     int disk;
     int wJobs;
     int rJobs;
+
+    // queue for jobs
+    ArrayList<Job> queue = new ArrayList<Job>();
 
     /**
      * 
@@ -64,6 +70,49 @@ public class Server {
      */
     public boolean noJobs() {
         return wJobs == 0 && rJobs == 0;
+    }
+
+    public boolean canRunNow(Job j) {
+        int availableCore = core;
+        int availableMemory = memory;
+        int availableDisk = disk;
+        // loop through the job queue
+        for(Job job : queue) {
+            availableCore -= job.core;
+            availableMemory -= job.memory;
+            availableDisk -= job.disk;
+        }
+        // return true if all availRequirements >= j.requirements
+        // false otherwise
+        return availableCore >= j.core && availableMemory >= j.memory && availableDisk >= j.disk;
+    }
+
+    public void scheduleJob(Job j) {
+        queue.add(j);
+    }
+
+    public void removeJob(int jobID) {
+        // remove the job
+        Iterator<Job> iter = queue.iterator();
+        while (iter.hasNext()) {
+            Job j = iter.next();
+
+            if (j.jobID == jobID) {
+                iter.remove();
+            }
+        }
+    }
+
+    public boolean canRunLater(Job j) {
+        return core >= j.core && memory >= j.memory && disk >= j.disk;
+    }
+
+    public int getServerEstRun() {
+        int result = 0;
+        for(Job j : queue) {
+            result += j.estRunTime;
+        }
+        return result;
     }
 
     /**
