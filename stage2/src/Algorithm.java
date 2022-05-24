@@ -42,7 +42,7 @@ public abstract class Algorithm {
      */
     public static void writeMessage(String message) throws IOException {
         String formattedMessage = message + "\n";
-        // System.out.println("CLIENT: "+message);
+        System.out.println("CLIENT: "+message);
         output.write((formattedMessage).getBytes());
         output.flush();
     }
@@ -57,7 +57,7 @@ public abstract class Algorithm {
     public static String receiveMessage() throws IOException {
         String message = "";
         message = input.readLine();
-        // System.out.println("SERVER: "+message);
+        System.out.println("SERVER: "+message);
         return message;
     }
 
@@ -71,5 +71,21 @@ public abstract class Algorithm {
 		} catch (IOException e) {
             System.out.println(e);
 		}
+    }
+
+    public static void auth() throws IOException {
+        writeMessage("HELO");
+        setServerMessage(receiveMessage()); // OK
+
+        writeMessage("AUTH " + getUsername());
+        setServerMessage(receiveMessage()); // OK
+
+        writeMessage("REDY");
+        setServerMessage(receiveMessage()); // JOBN
+    }
+
+    public static void quit() throws IOException {
+        writeMessage("QUIT");
+        setServerMessage(receiveMessage()); // QUIT
     }
 }
