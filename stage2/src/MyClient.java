@@ -70,6 +70,8 @@ public class MyClient {
             schedulingAlgorithm = new O(input, output);
         } else if (schedAlgo.equals("mf")) {
             schedulingAlgorithm = new MyFF(input, output);
+        } else if (schedAlgo.equals("op")) {
+            schedulingAlgorithm = new Optimised(input, output);
         }
 
         try {
