@@ -161,8 +161,9 @@ public class Optimised extends Algorithm {
      * migrates job to the server and handles the ERR bug
      * 
      * MIGJ jobID, srcServerType, srcServerID, tgtServerType, tgtServerID
+     * @throws IOException
      */
-    private void migrateJob(Server target) {
+    private void migrateJob(Server target) throws IOException {
         // guaranteed: serverMessage will be a JCPL
         // JCPL endTime jobID serverType serverID
 
@@ -175,7 +176,7 @@ public class Optimised extends Algorithm {
 
         // do null checks
         Job longestJob = new Job();
-
+        Server sourceServer = new Server();
         // for each server,
         // find their longest waiting job (if any)
         // compare the longest waiting job's est waiting time with longestWaitingJob's estRunTime
@@ -187,6 +188,7 @@ public class Optimised extends Algorithm {
                 Job serverLongest = largestWaitingJob(s);
                 if (serverLongest.estRunTime > longestJob.estRunTime && target.canRunLater(serverLongest)) {
                     longestJob = serverLongest;
+                    sourceServer = s;
                 }
             }
         }
@@ -194,20 +196,50 @@ public class Optimised extends Algorithm {
         // check if migration is appropriate
         // ONLY MIGRATE THE JOB IF:
             // the new estruntime on target is < the estruntime on source
-
+        if(sourceServer.getServerEstRun() > target.getServerEstRun()+longestJob.estRunTime) {
+            // migrate the job
+        }
         
 
     }
 
-    private Job largestWaitingJob(Server s) {
+    private Job largestWaitingJob(Server s) throws IOException {
         // jobState: 1 for waiting, 2 for running
-        Job longestEst = s.queue.get(0);
-        for(Job j: s.queue) {
-            if (j.estRunTime > longestEst.estRunTime) {
-                longestEst = j;
+        // guaranteed: s has at least 1 job in its queue
+        Job longestWaiting = new Job();
+        // for(Job j: s.queue) {
+        //     if (j.estRunTime > longestWaiting.estRunTime) {
+        //         longestWaiting = j;
+        //     }
+        // }
+
+        // LSTJ
+        // DATA
+        // OK
+        // job info
+        // OK
+        // .
+        writeMessage("LSTJ " + s.serverType + " " + s.serverID);
+        setServerMessage(receiveMessage()); // DATA
+        int numJobs = s.queue.size(); // get number of jobs on the server
+        writeMessage("OK"); // sends job info
+        
+        if (numJobs > 0) {
+            for(int i = 0; i < numJobs; i++) {
+                setServerMessage(receiveMessage()); // job info
+                // jobID, state, submitTime, startTime, estRunTime, core, memory, disk
+                String[] lstj = getServerMessage().split(" ");
+
+                if(lstj[1].equals("1")) { // if the job is currently waiting
+                    longestWaiting = s.getJob(Integer.parseInt(lstj[0]));
+                }
             }
-        }
-        return longestEst;
-    }
     
+            writeMessage("OK");
+        }
+
+        setServerMessage(receiveMessage()); // .
+
+        return longestWaiting;
+    }
 }

@@ -27,7 +27,7 @@ public class Server {
         memory = -1;
         disk = -1;
         wJobs = -1;
-        rJobs = -1-1obs;
+        rJobs = -1;
     }
 
     /**
@@ -163,5 +163,16 @@ public class Server {
      */
     public String toString() {
         return serverType + " " + serverID + " " + state + " " + curStartTime + " " + core + " " + memory + " " + disk + " " + wJobs + " " + rJobs;
+    }
+
+    public Job getJob(int jobID) {
+        if(!queue.isEmpty()) {
+            for(Job j: queue) {
+                if (j.jobID == jobID) {
+                    return j;
+                }
+            }
+        }
+        return null;
     }
 }
