@@ -16,6 +16,21 @@ public class Server {
     ArrayList<Job> queue = new ArrayList<Job>();
 
     /**
+     * no args constructor
+     */
+    public Server() {
+        serverType = "";
+        serverID = -1;
+        state = "";
+        curStartTime = -1;
+        core = -1;
+        memory = -1;
+        disk = -1;
+        wJobs = -1;
+        rJobs = -1-1obs;
+    }
+
+    /**
      * 
      * @param inServerType
      * @param inServerID

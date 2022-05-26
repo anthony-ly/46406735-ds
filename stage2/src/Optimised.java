@@ -180,11 +180,23 @@ public class Optimised extends Algorithm {
         // find their longest waiting job (if any)
         // compare the longest waiting job's est waiting time with longestWaitingJob's estRunTime
         // if > , reassign it
+        // find the longest waiting job
+        // target must be able to run it later
         for(Server s: allServers) {
             if (s.queue.size() > 0) {
-
+                Job serverLongest = largestWaitingJob(s);
+                if (serverLongest.estRunTime > longestJob.estRunTime && target.canRunLater(serverLongest)) {
+                    longestJob = serverLongest;
+                }
             }
         }
+
+        // check if migration is appropriate
+        // ONLY MIGRATE THE JOB IF:
+            // the new estruntime on target is < the estruntime on source
+
+        
+
     }
 
     private Job largestWaitingJob(Server s) {
@@ -194,7 +206,7 @@ public class Optimised extends Algorithm {
             if (j.estRunTime > longestEst.estRunTime) {
                 longestEst = j;
             }
-        }            
+        }
         return longestEst;
     }
     
