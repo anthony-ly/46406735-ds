@@ -45,6 +45,7 @@ public class Optimised extends Algorithm {
                 for(Server s: allServers) {
                     if(s.serverType.equals(serverType) && s.serverID == serverID) {
                         s.removeJob(jobID);
+                        // TODO: HOW TO HANDLE THE LAST JCPL????
                         // check if the server that the JCPL specifies has no jobs in its job queue
                         // if no servers, try to migrate a job to it
                         // which job to migrate??
@@ -165,31 +166,36 @@ public class Optimised extends Algorithm {
         // guaranteed: serverMessage will be a JCPL
         // JCPL endTime jobID serverType serverID
 
-        // need to find the source server to move job from
+        // need to find the longestWaitingJob that can be run on target
         // loop through all the servers
             // call LSTJ on each server
             // if the server has a job that is waiting and can be run on target
                 // store the job as "largest waiting job"
-        Job largestWaitingJob = null;
+        
 
         // do null checks
+        Job longestJob = new Job();
 
+        // for each server,
+        // find their longest waiting job (if any)
+        // compare the longest waiting job's est waiting time with longestWaitingJob's estRunTime
+        // if > , reassign it
+        for(Server s: allServers) {
+            if (s.queue.size() > 0) {
 
-
+            }
+        }
     }
 
     private Job largestWaitingJob(Server s) {
         // jobState: 1 for waiting, 2 for running
-        if (s.queue.size() > 0) {
-            Job longestEst = s.queue.get(0);
-            for(Job j: s.queue) {
-                if (j.estRunTime > longestEst.estRunTime) {
-                    longestEst = j;
-                }
+        Job longestEst = s.queue.get(0);
+        for(Job j: s.queue) {
+            if (j.estRunTime > longestEst.estRunTime) {
+                longestEst = j;
             }
-            return longestEst;
-        }
-        return null;
+        }            
+        return longestEst;
     }
     
 }

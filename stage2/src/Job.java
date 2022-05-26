@@ -7,6 +7,18 @@ public class Job {
     int disk;
 
     /**
+     * no args constructor
+     */
+    public Job() {
+        submitTime = -1;
+        jobID = -1;
+        estRunTime = -1;
+        core = -1;
+        memory = -1;
+        disk = -1;
+    }
+
+    /**
      * 
      * @param inSubmitTime
      * @param inJobID
