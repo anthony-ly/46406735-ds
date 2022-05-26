@@ -41,12 +41,22 @@ public class Optimised extends Algorithm {
                 String serverType = jcplInfo[3];
                 int serverID = Integer.parseInt(jcplInfo[4]);
                 
+                // remove the completed job from the corresponding server's job queue
                 for(Server s: allServers) {
                     if(s.serverType.equals(serverType) && s.serverID == serverID) {
                         s.removeJob(jobID);
+                        // check if the server that the JCPL specifies has no jobs in its job queue
+                        // if no servers, try to migrate a job to it
+                        // which job to migrate??
+                            // job that has <= resource requirements that the server
+                            // job that is not currently running
+                        // migrate the current longest waiting job that is the server is capable of running
+                        System.out.println(getServerMessage());
+                        break;
                     }
                 }
 
+                
 
                 writeMessage("REDY");
                 setServerMessage(receiveMessage()); // JOBN
@@ -144,6 +154,42 @@ public class Optimised extends Algorithm {
         writeMessage("SCHD " + job.jobID + " " + lowest.serverType + " " + lowest.serverID);
         lowest.scheduleJob(job);
         setServerMessage(receiveMessage()); // OK
+    }
+
+    /**
+     * migrates job to the server and handles the ERR bug
+     * 
+     * MIGJ jobID, srcServerType, srcServerID, tgtServerType, tgtServerID
+     */
+    private void migrateJob(Server target) {
+        // guaranteed: serverMessage will be a JCPL
+        // JCPL endTime jobID serverType serverID
+
+        // need to find the source server to move job from
+        // loop through all the servers
+            // call LSTJ on each server
+            // if the server has a job that is waiting and can be run on target
+                // store the job as "largest waiting job"
+        Job largestWaitingJob = null;
+
+        // do null checks
+
+
+
+    }
+
+    private Job largestWaitingJob(Server s) {
+        // jobState: 1 for waiting, 2 for running
+        if (s.queue.size() > 0) {
+            Job longestEst = s.queue.get(0);
+            for(Job j: s.queue) {
+                if (j.estRunTime > longestEst.estRunTime) {
+                    longestEst = j;
+                }
+            }
+            return longestEst;
+        }
+        return null;
     }
     
 }
