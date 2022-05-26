@@ -52,7 +52,8 @@ public class Optimised extends Algorithm {
                             // job that has <= resource requirements that the server
                             // job that is not currently running
                         // migrate the current longest waiting job that is the server is capable of running
-                        System.out.println(getServerMessage());
+                        // System.out.println(getServerMessage());
+                        migrateJob(s);
                         break;
                     }
                 }
@@ -184,7 +185,7 @@ public class Optimised extends Algorithm {
         // find the longest waiting job
         // target must be able to run it later
         for(Server s: allServers) {
-            if (s.queue.size() > 0) {
+            if (!s.queue.isEmpty()) {
                 Job serverLongest = largestWaitingJob(s);
                 if (serverLongest.estRunTime > longestJob.estRunTime && target.canRunLater(serverLongest)) {
                     longestJob = serverLongest;
@@ -198,6 +199,15 @@ public class Optimised extends Algorithm {
             // the new estruntime on target is < the estruntime on source
         if(sourceServer.getServerEstRun() > target.getServerEstRun()+longestJob.estRunTime) {
             // migrate the job
+            // guaranteed: server message is .
+            String migrate = "MIGJ " + longestJob.jobID + " " + sourceServer.serverType + " " + sourceServer.serverID 
+            + " " + target.serverType + " " + target.serverID;
+            // writeMessage(migrate);
+            System.out.println("source: "+ sourceServer.getServerEstRun());
+            System.out.println("target: "+ (target.getServerEstRun()+longestJob.estRunTime));
+            System.out.println("job: "+ longestJob);
+            System.out.println(migrate+"\n-----------------");
+            // setServerMessage(receiveMessage()); // ERR
         }
         
 
@@ -230,7 +240,8 @@ public class Optimised extends Algorithm {
                 // jobID, state, submitTime, startTime, estRunTime, core, memory, disk
                 String[] lstj = getServerMessage().split(" ");
 
-                if(lstj[1].equals("1")) { // if the job is currently waiting
+                Job current = s.getJob(Integer.parseInt(lstj[0]));
+                if(lstj[1].equals("1") && current != null && current.estRunTime > longestWaiting.estRunTime) { // if the job is currently waiting
                     longestWaiting = s.getJob(Integer.parseInt(lstj[0]));
                 }
             }

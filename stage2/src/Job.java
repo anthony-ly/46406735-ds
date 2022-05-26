@@ -58,4 +58,8 @@ public class Job {
     public String getRequirements() {
         return core + " " + memory + " " + disk;
     }
+
+    public String toString(){
+        return submitTime + " " + jobID + " " + estRunTime + " " +  core + " " +  memory + " " + disk;
+    }
 }
