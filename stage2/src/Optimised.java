@@ -59,9 +59,9 @@ public class Optimised extends Algorithm {
                 }
 
                 
-
                 writeMessage("REDY");
                 setServerMessage(receiveMessage()); // JOBN
+                System.out.println("1expected JOBN, JCPL, NONE | got: " + getServerMessage());
                 jobn = getServerMessage();
                 continue;
             }
@@ -75,6 +75,7 @@ public class Optimised extends Algorithm {
 
             writeMessage("REDY");
             setServerMessage(receiveMessage()); // JOBN, JCPL etc.
+            System.out.println("2expected JOBN, JCPL, NONE | got: " + getServerMessage());
 
             jobn = getServerMessage();
 
@@ -97,7 +98,6 @@ public class Optimised extends Algorithm {
             String[] serverData = getServerMessage().split(" ");
 
             String nRecs = serverData[1]; // store the number of servers
-
             if (!nRecs.equals(".")) {
                 serverNums = Integer.parseInt(nRecs); // store number of server records as int
             } else {
@@ -140,6 +140,7 @@ public class Optimised extends Algorithm {
                 writeMessage("SCHD " + job.jobID + " " + s.serverType + " " + s.serverID);
                 s.scheduleJob(job);
                 setServerMessage(receiveMessage()); // OK
+                System.out.println("exp: OK | rec: " + getServerMessage());
                 return;
             }
         }
@@ -156,6 +157,7 @@ public class Optimised extends Algorithm {
         writeMessage("SCHD " + job.jobID + " " + lowest.serverType + " " + lowest.serverID);
         lowest.scheduleJob(job);
         setServerMessage(receiveMessage()); // OK
+        System.out.println("exp: OK | rec: " + getServerMessage());
     }
 
     /**
@@ -177,7 +179,7 @@ public class Optimised extends Algorithm {
 
         // do null checks
         Job longestJob = new Job();
-        Server sourceServer = new Server();
+        Server sourceServer = null;
         // for each server,
         // find their longest waiting job (if any)
         // compare the longest waiting job's est waiting time with longestWaitingJob's estRunTime
@@ -186,7 +188,8 @@ public class Optimised extends Algorithm {
         // target must be able to run it later
         for(Server s: allServers) {
             if (!s.queue.isEmpty()) {
-                Job serverLongest = largestWaitingJob(s);
+                Job serverLongest = largestWaitingJob(s); // longest waiting job on the current server
+
                 if (serverLongest.estRunTime > longestJob.estRunTime && target.canRunLater(serverLongest)) {
                     longestJob = serverLongest;
                     sourceServer = s;
@@ -197,17 +200,17 @@ public class Optimised extends Algorithm {
         // check if migration is appropriate
         // ONLY MIGRATE THE JOB IF:
             // the new estruntime on target is < the estruntime on source
-        if(sourceServer.getServerEstRun() > target.getServerEstRun()+longestJob.estRunTime) {
+        if(sourceServer != null && sourceServer.getServerEstRun() > target.getServerEstRun()+longestJob.estRunTime) {
             // migrate the job
             // guaranteed: server message is .
             String migrate = "MIGJ " + longestJob.jobID + " " + sourceServer.serverType + " " + sourceServer.serverID 
             + " " + target.serverType + " " + target.serverID;
-            // writeMessage(migrate);
-            System.out.println("source: "+ sourceServer.getServerEstRun());
-            System.out.println("target: "+ (target.getServerEstRun()+longestJob.estRunTime));
-            System.out.println("job: "+ longestJob);
-            System.out.println(migrate+"\n-----------------");
-            // setServerMessage(receiveMessage()); // ERR
+
+            writeMessage(migrate);
+            setServerMessage(receiveMessage()); // ERR
+
+            sourceServer.removeJob(longestJob.jobID); // remove job from old server
+            target.queue.add(longestJob); // add job to new server
         }
         
 
@@ -231,12 +234,16 @@ public class Optimised extends Algorithm {
         // .
         writeMessage("LSTJ " + s.serverType + " " + s.serverID);
         setServerMessage(receiveMessage()); // DATA
-        int numJobs = s.queue.size(); // get number of jobs on the server
+        
+        // int numJobs = s.queue.size(); // get number of jobs on the server
+        int numJobs = getNumDataFields();
+        
         writeMessage("OK"); // sends job info
         
         if (numJobs > 0) {
             for(int i = 0; i < numJobs; i++) {
                 setServerMessage(receiveMessage()); // job info
+
                 // jobID, state, submitTime, startTime, estRunTime, core, memory, disk
                 String[] lstj = getServerMessage().split(" ");
 
@@ -250,7 +257,22 @@ public class Optimised extends Algorithm {
         }
 
         setServerMessage(receiveMessage()); // .
-
+        
         return longestWaiting;
+    }
+
+    private int getNumDataFields() {
+        int dataNums = 0;
+        String[] serverData = getServerMessage().split(" ");
+
+        String nRecs = serverData[1]; // store the number of servers
+
+        if (!nRecs.equals(".")) {
+            dataNums = Integer.parseInt(nRecs); // store number of server records as int
+        } else {
+            dataNums = -1;
+        }
+
+        return dataNums;
     }
 }
