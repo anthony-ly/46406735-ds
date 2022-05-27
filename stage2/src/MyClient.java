@@ -62,6 +62,8 @@ public class MyClient {
         if (!openConnection(hostID, serverPort)) {
             return;
         }
+
+        // TODO remove other algorithms besides op and lrr
         if (schedAlgo.equals("lrr")) {
             schedulingAlgorithm = new LRR(input, output);
         } else if (schedAlgo.equals("s")) {

@@ -61,7 +61,7 @@ public class Optimised extends Algorithm {
                 
                 writeMessage("REDY");
                 setServerMessage(receiveMessage()); // JOBN
-                System.out.println("1expected JOBN, JCPL, NONE | got: " + getServerMessage());
+                // System.out.println("1expected JOBN, JCPL, NONE | got: " + getServerMessage());
                 jobn = getServerMessage();
                 continue;
             }
@@ -75,7 +75,7 @@ public class Optimised extends Algorithm {
 
             writeMessage("REDY");
             setServerMessage(receiveMessage()); // JOBN, JCPL etc.
-            System.out.println("2expected JOBN, JCPL, NONE | got: " + getServerMessage());
+            // System.out.println("2expected JOBN, JCPL, NONE | got: " + getServerMessage());
 
             jobn = getServerMessage();
 
@@ -140,7 +140,7 @@ public class Optimised extends Algorithm {
                 writeMessage("SCHD " + job.jobID + " " + s.serverType + " " + s.serverID);
                 s.scheduleJob(job);
                 setServerMessage(receiveMessage()); // OK
-                System.out.println("exp: OK | rec: " + getServerMessage());
+                // System.out.println("exp: OK | rec: " + getServerMessage());
                 return;
             }
         }
@@ -157,7 +157,7 @@ public class Optimised extends Algorithm {
         writeMessage("SCHD " + job.jobID + " " + lowest.serverType + " " + lowest.serverID);
         lowest.scheduleJob(job);
         setServerMessage(receiveMessage()); // OK
-        System.out.println("exp: OK | rec: " + getServerMessage());
+        // System.out.println("exp: OK | rec: " + getServerMessage());
     }
 
     /**
@@ -207,7 +207,7 @@ public class Optimised extends Algorithm {
             + " " + target.serverType + " " + target.serverID;
 
             writeMessage(migrate);
-            setServerMessage(receiveMessage()); // ERR TODO: check what the message is now that the bug has been fixed
+            setServerMessage(receiveMessage()); // OK
 
             sourceServer.removeJob(longestJob.jobID); // remove job from old server
             target.queue.add(longestJob); // add job to new server

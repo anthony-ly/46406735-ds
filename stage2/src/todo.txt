@@ -5,3 +5,5 @@ Remove files:
     RR.java
 
 Clean up directory
+
+Remove print statements
