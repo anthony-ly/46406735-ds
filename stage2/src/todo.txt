@@ -1,0 +1,7 @@
+Remove files:
+    Temp.java
+    MyFF.java
+    O.java
+    RR.java
+
+Clean up directory

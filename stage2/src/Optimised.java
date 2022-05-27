@@ -207,7 +207,7 @@ public class Optimised extends Algorithm {
             + " " + target.serverType + " " + target.serverID;
 
             writeMessage(migrate);
-            setServerMessage(receiveMessage()); // ERR
+            setServerMessage(receiveMessage()); // ERR TODO: check what the message is now that the bug has been fixed
 
             sourceServer.removeJob(longestJob.jobID); // remove job from old server
             target.queue.add(longestJob); // add job to new server
