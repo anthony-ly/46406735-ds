@@ -1,0 +1,13 @@
+Schedule jobs in round robin fashion based on the first server type returned by GETS Capable.
+
+e.g. 
+large job 0 goes to large server 0
+large job 1 goes to large server 1
+large job 2 goes to large server 2
+small job 0 goes to small server 0
+medium job 0 goes to medium server 0
+
+When no more servers are available, schedule the job to the next suitable server based on:
+1. how many running and waiting jobs the server has
+2. the estimated run time of the job
+

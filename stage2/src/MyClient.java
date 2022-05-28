@@ -63,15 +63,8 @@ public class MyClient {
             return;
         }
 
-        // TODO remove other algorithms besides op and lrr
         if (schedAlgo.equals("lrr")) {
             schedulingAlgorithm = new LRR(input, output);
-        } else if (schedAlgo.equals("s")) {
-            schedulingAlgorithm = new RR(input, output);
-        } else if (schedAlgo.equals("o")) {
-            schedulingAlgorithm = new O(input, output);
-        } else if (schedAlgo.equals("mf")) {
-            schedulingAlgorithm = new MyFF(input, output);
         } else if (schedAlgo.equals("op")) {
             schedulingAlgorithm = new Optimised(input, output);
         }
