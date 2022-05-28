@@ -8,6 +8,10 @@ public abstract class Algorithm {
     private static String serverMessage;
     private static String username = System.getProperty("user.name");
 
+    /**
+     * Constructor:
+     * takes in a BufferedReader and a DataOutputStream
+     */
     public Algorithm(BufferedReader in, DataOutputStream out) {
         input = in;
         output = out;
@@ -24,10 +28,19 @@ public abstract class Algorithm {
         return username;
     }
 
+    /**
+     * 
+     * @param message - value to assign to serverMessage
+     * Assigns message to severMessage
+     */
     public static void setServerMessage(String message) {
         serverMessage = message;
     }
 
+    /**
+     * 
+     * @return serverMessage
+     */
     public static String getServerMessage() {
         return serverMessage;
     }
@@ -73,6 +86,20 @@ public abstract class Algorithm {
 		}
     }
 
+    /**
+     * 
+     * @throws IOException
+     * 
+     * Performs the handshake with ds-server
+     * Sends HELO
+     * Receives OK
+     * 
+     * Sends AUTH username
+     * Recieves OK
+     * 
+     * Sends REDY
+     * Receives response
+     */
     public static void auth() throws IOException {
         writeMessage("HELO");
         setServerMessage(receiveMessage()); // OK
@@ -84,6 +111,13 @@ public abstract class Algorithm {
         setServerMessage(receiveMessage()); // JOBN
     }
 
+    /**
+     * 
+     * @throws IOException
+     * 
+     * Sends QUIT to ds-server
+     * Receives QUIT from ds-server
+     */
     public static void quit() throws IOException {
         writeMessage("QUIT");
         setServerMessage(receiveMessage()); // QUIT
