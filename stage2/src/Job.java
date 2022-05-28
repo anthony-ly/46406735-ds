@@ -55,10 +55,17 @@ public class Job {
         disk = Integer.parseInt(jobData[6]);
     }
 
+    /**
+     * 
+     * @return the job's resource requirements
+     */
     public String getRequirements() {
         return core + " " + memory + " " + disk;
     }
 
+    /**
+     * returns String that is formatted the same way ds-server formats job information
+     */
     public String toString(){
         return submitTime + " " + jobID + " " + estRunTime + " " +  core + " " +  memory + " " + disk;
     }
