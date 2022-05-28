@@ -135,7 +135,9 @@ public class Optimised extends Algorithm {
         // if none found, send to the first capable server
 
         for(Server s: allServers) {
-            if (s.canRunNow(job) && s.noJobs()) { // GETS Available
+            // TODO: check which conditional is better optimised
+            // if (s.canRunNow(job) && s.noJobs()) { // GETS Available
+            if (s.canRunNow(job)) { // GETS Available 
                 // schedule the job here
                 writeMessage("SCHD " + job.jobID + " " + s.serverType + " " + s.serverID);
                 s.scheduleJob(job);
@@ -187,7 +189,7 @@ public class Optimised extends Algorithm {
         // find the longest waiting job
         // target must be able to run it later
         for(Server s: allServers) {
-            if (!s.queue.isEmpty()) {
+            if (!s.queue.isEmpty()) { // ONLY CHECKS FOR SERVERS THAT CURRENTLY HAVE JOBS RUNNING
                 Job serverLongest = largestWaitingJob(s); // longest waiting job on the current server
 
                 if (serverLongest.estRunTime > longestJob.estRunTime && target.canRunLater(serverLongest)) {
