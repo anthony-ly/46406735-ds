@@ -201,8 +201,9 @@ public class Optimised extends Algorithm {
 
         // check if migration is appropriate
         // ONLY MIGRATE THE JOB IF:
-            // the new estruntime on target is < the estruntime on source
-        if(sourceServer != null && sourceServer.getServerEstRun() > target.getServerEstRun()+longestJob.estRunTime) {
+            // the new estruntime on target is < the estruntime on source delete this
+        // if(sourceServer != null && sourceServer.getServerEstRun() > target.getServerEstRun()+longestJob.estRunTime) {
+        if(sourceServer != null) { // TODO check which conditional
             // migrate the job
             // guaranteed: server message is .
             String migrate = "MIGJ " + longestJob.jobID + " " + sourceServer.serverType + " " + sourceServer.serverID 
