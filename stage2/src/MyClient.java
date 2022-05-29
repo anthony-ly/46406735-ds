@@ -40,8 +40,6 @@ public class MyClient {
      */
     public static void closeConnection() {
         try {
-            // input.close();
-            // output.close();
             Algorithm.closeReaders();
             socket.close();
         }
@@ -63,10 +61,11 @@ public class MyClient {
             return;
         }
 
+        // Determine which scheduling algorithm to use based on command line argument
         if (schedAlgo.equals("lrr")) {
             schedulingAlgorithm = new LRR(input, output);
-        } else if (schedAlgo.equals("op")) {
-            schedulingAlgorithm = new Optimised(input, output);
+        } else if (schedAlgo.equals("tto")) {
+            schedulingAlgorithm = new TTO(input, output);
         }
 
         try {
